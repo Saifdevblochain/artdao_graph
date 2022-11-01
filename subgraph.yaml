@@ -1,0 +1,35 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: designDao
+    network: goerli
+    source:
+      address: "0x99fb86cbfe639c27eae290fefd611d83f724ff73"
+      abi: designDao
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Announcewinner
+        - CommitteeVote
+        - NftAdded
+        - NftApproved
+        - PublicVote
+      abis:
+        - name: designDao
+          file: ./abis/designDao.json
+      eventHandlers:
+        - event: Announcewinner(uint256,(string,address,string,string,uint8,uint8,uint256,bool),uint256)
+          handler: handleAnnouncewinner
+        - event: CommitteeVote(address,uint256,bool,(string,address,string,string,uint8,uint8,uint256,bool))
+          handler: handleCommitteeVote
+        - event: NftAdded(uint256,(string,address,string,string,uint8,uint8,uint256,bool),uint256,uint256)
+          handler: handleNftAdded
+        - event: NftApproved(uint256,(string,address,string,string,uint8,uint8,uint256,bool),uint256,uint256)
+          handler: handleNftApproved
+        - event: PublicVote(address,uint256,(string,address,string,string,uint8,uint8,uint256,bool))
+          handler: handlePublicVote
+      file: ./src/design-dao.ts

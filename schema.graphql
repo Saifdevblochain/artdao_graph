@@ -1,0 +1,72 @@
+type Announcewinner @entity {
+  id: ID!
+  index: BigInt! # uint256
+  _NFT_uri: String! # string
+  _NFT_owner: Bytes! # address
+  _NFT_title: String! # string
+  _NFT_description: String! # string
+  _NFT_approvedVotes: Int! # uint8
+  _NFT_rejectedVotes: Int! # uint8
+  _NFT_votes: BigInt! # uint256
+  _NFT_isApprovedByCommittee: Boolean! # bool
+  timestamp: BigInt! # uint256
+}
+
+type CommitteeVote @entity {
+  id: ID!
+  _address: Bytes! # address
+  index: BigInt! # uint256
+  decision: Boolean! # bool
+  _NFT_uri: String! # string
+  _NFT_owner: Bytes! # address
+  _NFT_title: String! # string
+  _NFT_description: String! # string
+  _NFT_approvedVotes: Int! # uint8
+  _NFT_rejectedVotes: Int! # uint8
+  _NFT_votes: BigInt! # uint256
+  _NFT_isApprovedByCommittee: Boolean! # bool
+}
+
+type NftAdded @entity {
+  id: ID!
+  index: BigInt! # uint256
+  _nft_uri: String! # string
+  _nft_owner: Bytes! # address
+  _nft_title: String! # string
+  _nft_description: String! # string
+  _nft_approvedVotes: Int! # uint8
+  _nft_rejectedVotes: Int! # uint8
+  _nft_votes: BigInt! # uint256
+  _nft_isApprovedByCommittee: Boolean! # bool
+  uploadTime: BigInt! # uint256
+  expireTime: BigInt! # uint256
+}
+
+type NftApproved @entity {
+  id: ID!
+  index: BigInt! # uint256
+  _NFT_uri: String! # string
+  _NFT_owner: Bytes! # address
+  _NFT_title: String! # string
+  _NFT_description: String! # string
+  _NFT_approvedVotes: Int! # uint8
+  _NFT_rejectedVotes: Int! # uint8
+  _NFT_votes: BigInt! # uint256
+  _NFT_isApprovedByCommittee: Boolean! # bool
+  startTime: BigInt! # uint256
+  expireTime: BigInt! # uint256
+}
+
+type PublicVote @entity {
+  id: ID!
+  sender: Bytes! # address
+  index: BigInt! # uint256
+  _NFT_uri: String! # string
+  _NFT_owner: Bytes! # address
+  _NFT_title: String! # string
+  _NFT_description: String! # string
+  _NFT_approvedVotes: Int! # uint8
+  _NFT_rejectedVotes: Int! # uint8
+  _NFT_votes: BigInt! # uint256
+  _NFT_isApprovedByCommittee: Boolean! # bool
+}
