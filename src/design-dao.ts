@@ -6,6 +6,7 @@ import {
   PublicVote as PublicVoteEvent
 } from "../generated/designDao/designDao"
 import {
+  CommitteeDecision,
   Announcewinner,
   CommitteeVote,
   NftAdded,
@@ -46,11 +47,37 @@ export function handleCommitteeVote(event: CommitteeVoteEvent): void {
   entity._NFT_votes = event.params._NFT.votes
   entity._NFT_isApprovedByCommittee = event.params._NFT.isApprovedByCommittee
   entity.save()
+
+  let id = event.params.index.toString()
+  let nft = NftAdded.load(id);
+  if (nft) {
+    nft._nft_approvedVotes = event.params._NFT.approvedVotes
+    nft._nft_rejectedVotes = event.params._NFT.rejectedVotes
+    nft._nft_votes = event.params._NFT.votes
+    nft._nft_isApprovedByCommittee = event.params._NFT.isApprovedByCommittee
+
+    // saving committeeDecision object
+    let _id = event.params._address.toHexString().concat("-").concat(event.params.index.toString())
+    let cd = new CommitteeDecision(_id)
+    cd.address = event.params._address
+    cd.decision = event.params.decision
+    cd.save()
+
+    // pushing committeeDecision as a string to an array
+    let voters = nft.adminVotes
+    let committeeDecision = 
+      event.params._address.toHexString().concat(",")
+      .concat(event.params.decision.toString())
+    voters.push(committeeDecision)
+    nft.adminVotes = voters
+
+    nft.save()
+  }
 }
 
 export function handleNftAdded(event: NftAddedEvent): void {
   let entity = new NftAdded(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+    event.params.index.toString()
   )
   entity.index = event.params.index
   entity._nft_uri = event.params._nft.uri
@@ -63,6 +90,8 @@ export function handleNftAdded(event: NftAddedEvent): void {
   entity._nft_isApprovedByCommittee = event.params._nft.isApprovedByCommittee
   entity.uploadTime = event.params.uploadTime
   entity.expireTime = event.params.expireTime
+  entity.adminVotes = []
+  entity.publicVotes = []
   entity.save()
 }
 
@@ -98,5 +127,17 @@ export function handlePublicVote(event: PublicVoteEvent): void {
   entity._NFT_rejectedVotes = event.params._NFT.rejectedVotes
   entity._NFT_votes = event.params._NFT.votes
   entity._NFT_isApprovedByCommittee = event.params._NFT.isApprovedByCommittee
+  
+  let idPublicVotes= event.params.index.toString()
+  let pv = NftAdded.load(idPublicVotes);
+  if(pv){
+    pv._nft_votes = event.params._NFT.votes
+
+    let publicVoters= pv.publicVotes
+    publicVoters.push(event.params.sender)
+    pv.publicVotes=publicVoters
+
+    pv.save()
+  }
   entity.save()
 }

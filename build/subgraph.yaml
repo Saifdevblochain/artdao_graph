@@ -1,6 +1,6 @@
 specVersion: 0.0.4
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: designDao
@@ -21,7 +21,7 @@ dataSources:
         - PublicVote
       abis:
         - name: designDao
-          file: ./abis/designDao.json
+          file: designDao\abis\designDao.json
       eventHandlers:
         - event: Announcewinner(uint256,(string,address,string,string,uint8,uint8,uint256,bool),uint256)
           handler: handleAnnouncewinner
@@ -33,4 +33,4 @@ dataSources:
           handler: handleNftApproved
         - event: PublicVote(address,uint256,(string,address,string,string,uint8,uint8,uint256,bool))
           handler: handlePublicVote
-      file: ./src/design-dao.ts
+      file: designDao\designDao.wasm
